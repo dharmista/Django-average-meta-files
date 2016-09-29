@@ -88,6 +88,8 @@ def get_average(sem,num):
     return temp
 
 def get_marks(sem,number):
+    if number[1]=='4' and sem < 3:          #Lateral entries
+        return None,None,None
     adap = baba.get_average(sem, number)
     adap = adap.average()
     soup = BeautifulSoup(adap, "html.parser")
@@ -99,8 +101,10 @@ def get_marks(sem,number):
     return baba.get_average(sem,number).subject_marks(marks,credit_less,metas,marks_effected,marks_effected_by_sups)
 
 def show_all_sems(number):
-    sem_map = [];metas={};sum=0
-    for sem in range(1,9):
+    sem_map = [];metas={};sum=0;start = 1
+    if number[1]=='4':          #Lateral entries
+        start = 3
+    for sem in range(start,9):
         if urls[sem-1] is not None:
             sub_marks,cless,metas,marks_effected,marks_by_sups = get_marks(sem,number)
             diff = float(metas['total'])/int(metas['count'])
